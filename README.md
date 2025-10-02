@@ -190,12 +190,41 @@ Para cada issue, o script extrai:
 - Autor de cada comentário
 - Datas dos comentários
 
-## 🔧 Dependências
+## 🔧 Instalação
 
-Instale as dependências necessárias:
+### Método Rápido (Recomendado)
 
 ```bash
-pip install requests beautifulsoup4 lxml
+# Instalar dependências
+pip install -r requirements.txt
+
+# Testar instalação
+python gitlab_extractor_unified.py --help
+```
+
+### Scripts de Instalação Automática
+
+**Linux/macOS:**
+```bash
+chmod +x install.sh
+./install.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\install.ps1
+```
+
+### Instalação Manual
+
+```bash
+pip install requests>=2.31.0 beautifulsoup4>=4.12.0 lxml>=4.9.0
+```
+
+### Para Desenvolvedores
+
+```bash
+pip install -r requirements-dev.txt
 ```
 
 ## ⚙️ Configuração

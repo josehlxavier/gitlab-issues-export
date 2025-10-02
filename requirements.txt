@@ -1,0 +1,38 @@
+# GitLab Issues Extractor - Requirements
+# Dependências necessárias para executar o script de extração de issues do GitLab
+
+# Biblioteca para fazer requisições HTTP
+requests>=2.31.0
+
+# Parser HTML/XML para scraping web (caso necessário)
+beautifulsoup4>=4.12.0
+
+# Parser XML mais rápido para BeautifulSoup
+lxml>=4.9.0
+
+# Manipulação de caminhos de arquivos (built-in no Python 3.4+)
+# pathlib - já incluído no Python padrão
+
+# Argumentos de linha de comando (built-in)
+# argparse - já incluído no Python padrão
+
+# Manipulação de JSON (built-in)
+# json - já incluído no Python padrão
+
+# Manipulação de CSV (built-in)
+# csv - já incluído no Python padrão
+
+# Manipulação de datas (built-in)
+# datetime - já incluído no Python padrão
+
+# Manipulação de URLs (built-in)
+# urllib - já incluído no Python padrão
+
+# Expressões regulares (built-in)
+# re - já incluído no Python padrão
+
+# Sistema operacional (built-in)
+# os - já incluído no Python padrão
+
+# Controle de tempo/sleep (built-in)
+# time - já incluído no Python padrão

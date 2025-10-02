@@ -1,0 +1,29 @@
+# GitLab Issues Extractor - Development Requirements
+# Dependências adicionais para desenvolvimento e testes
+
+# Dependências principais
+-r requirements.txt
+
+# Ferramentas de desenvolvimento
+# Formatação de código
+black>=23.0.0
+
+# Linting
+pylint>=2.17.0
+flake8>=6.0.0
+
+# Type checking
+mypy>=1.5.0
+
+# Testes
+pytest>=7.4.0
+pytest-cov>=4.1.0
+
+# Documentação
+sphinx>=7.1.0
+
+# Ferramentas de análise de segurança
+bandit>=1.7.0
+
+# Gerenciamento de dependências
+pip-tools>=7.1.0

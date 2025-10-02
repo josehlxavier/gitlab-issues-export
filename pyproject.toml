@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gitlab-issues-extractor"
+version = "1.0.0"
+description = "Extrai informações de issues do GitLab usando a API pública"
+authors = [
+    {name = "José Henrique Lemos Xavier", email = "josehlxavier@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities"
+]
+dependencies = [
+    "requests>=2.31.0",
+    "beautifulsoup4>=4.12.0",
+    "lxml>=4.9.0"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=23.0.0",
+    "pylint>=2.17.0",
+    "flake8>=6.0.0",
+    "mypy>=1.5.0",
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "sphinx>=7.1.0",
+    "bandit>=1.7.0",
+    "pip-tools>=7.1.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/josehlxavier/gitlab-issues-export"
+Repository = "https://github.com/josehlxavier/gitlab-issues-export"
+Documentation = "https://github.com/josehlxavier/gitlab-issues-export#readme"
+"Bug Tracker" = "https://github.com/josehlxavier/gitlab-issues-export/issues"
+
+[project.scripts]
+gitlab-extractor = "gitlab_extractor_unified:main"
+
+[tool.black]
+line-length = 88
+target-version = ["py38", "py39", "py310", "py311", "py312"]
+
+[tool.pylint]
+max-line-length = 88
+
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
