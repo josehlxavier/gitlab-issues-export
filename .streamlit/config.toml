@@ -1,0 +1,14 @@
+[global]
+developmentMode = false
+
+[server]
+port = 8501
+address = "0.0.0.0"
+maxUploadSize = 200
+
+[theme]
+primaryColor = "#ff6b35"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#262730"
+textColor = "#fafafa"
+font = "sans serif"

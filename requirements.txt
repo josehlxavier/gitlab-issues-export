@@ -10,6 +10,27 @@ beautifulsoup4>=4.12.0
 # Parser XML mais rápido para BeautifulSoup
 lxml>=4.9.0
 
+# Dashboard interativo
+streamlit>=1.28.0
+
+# Visualizações e gráficos
+plotly>=5.17.0
+
+# Manipulação de dados
+pandas>=2.1.0
+
+# Métricas e análises
+numpy>=1.24.0
+
+# Dashboard interativo
+streamlit>=1.28.0
+
+# Visualizações interativas
+plotly>=5.17.0
+
+# Manipulação de dados
+pandas>=2.1.0
+
 # Manipulação de caminhos de arquivos (built-in no Python 3.4+)
 # pathlib - já incluído no Python padrão
 

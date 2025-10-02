@@ -243,10 +243,10 @@ class GitLabIssuesExtractor:
             filepath = self.get_standardized_filename('json', custom_name)
             with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(issues_data, f, indent=2, ensure_ascii=False)
-            print(f"✅ Dados JSON salvos em: {filepath}")
+            print(f"[OK] Dados JSON salvos em: {filepath}")
             return str(filepath)
         except Exception as e:
-            print(f"❌ Erro ao salvar arquivo JSON: {e}")
+            print(f"[ERRO] Erro ao salvar arquivo JSON: {e}")
             return None
 
     def save_to_csv(self, issues_data, custom_name=None):
@@ -291,10 +291,10 @@ class GitLabIssuesExtractor:
                     }
                     writer.writerow(row)
             
-            print(f"✅ Dados CSV salvos em: {filepath}")
+            print(f"[OK] Dados CSV salvos em: {filepath}")
             return str(filepath)
         except Exception as e:
-            print(f"❌ Erro ao salvar arquivo CSV: {e}")
+            print(f"[ERRO] Erro ao salvar arquivo CSV: {e}")
             return None
 
     def save_to_markdown(self, issues_data, custom_name=None):
@@ -335,10 +335,10 @@ class GitLabIssuesExtractor:
                     
                     f.write("---\n\n")
             
-            print(f"✅ Relatório Markdown salvo em: {filepath}")
+            print(f"[OK] Relatório Markdown salvo em: {filepath}")
             return str(filepath)
         except Exception as e:
-            print(f"❌ Erro ao salvar arquivo Markdown: {e}")
+            print(f"[ERRO] Erro ao salvar arquivo Markdown: {e}")
             return None
 
     def save_summary_report(self, issues_data, custom_name=None):
@@ -351,7 +351,7 @@ class GitLabIssuesExtractor:
                 f.write(f"**Total de issues:** {len(issues_data)}\n\n")
                 
                 # Estatísticas gerais
-                f.write("## 📊 Estatísticas Gerais\n\n")
+                f.write("## Estatísticas Gerais\n\n")
                 
                 # Por estado
                 states = {}
@@ -414,10 +414,10 @@ class GitLabIssuesExtractor:
                     
                     f.write("\n---\n\n")
             
-            print(f"✅ Relatório resumido salvo em: {filepath}")
+            print(f"[OK] Relatório resumido salvo em: {filepath}")
             return str(filepath)
         except Exception as e:
-            print(f"❌ Erro ao salvar relatório resumido: {e}")
+            print(f"[ERRO] Erro ao salvar relatório resumido: {e}")
             return None
 
     def print_summary(self, issues_data):
@@ -574,7 +574,7 @@ Exemplos de uso:
     # Criar extrator com diretório de saída personalizado
     extractor = GitLabIssuesExtractor(output_base_dir=args.output_dir)
     
-    print("🚀 Iniciando extração de issues do GitLab...")
+    print("[INICIO] Iniciando extração de issues do GitLab...")
     
     # Extrair issues
     issues = extractor.extract_all_issues(
@@ -590,14 +590,14 @@ Exemplos de uso:
     )
     
     if not issues:
-        print("❌ Nenhuma issue foi extraída.")
+        print("[AVISO] Nenhuma issue foi extraída.")
         return False
     
     # Mostrar resumo
     extractor.print_summary(issues)
     
     # Gerar arquivos de saída
-    print(f"\n📁 Gerando arquivos de saída...")
+    print(f"\n[ARQUIVOS] Gerando arquivos de saída...")
     generated_files = []
     
     if 'json' in output_formats:
@@ -621,11 +621,11 @@ Exemplos de uso:
             generated_files.append(summary_file)
     
     # Relatório final
-    print(f"\n✅ EXTRAÇÃO CONCLUÍDA COM SUCESSO!")
-    print(f"📊 Total de issues: {len(issues)}")
-    print(f"📁 Arquivos gerados:")
+    print(f"\n[SUCESSO] EXTRAÇÃO CONCLUÍDA COM SUCESSO!")
+    print(f"[INFO] Total de issues: {len(issues)}")
+    print(f"[ARQUIVOS] Arquivos gerados:")
     for file in generated_files:
-        print(f"   • {file}")
+        print(f"   - {file}")
     
     return True
 

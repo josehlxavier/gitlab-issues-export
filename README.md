@@ -4,7 +4,22 @@ Este projeto contém scripts para extrair informações de issues de projetos do
 
 ## 🚀 Como usar
 
-### Script Unificado (Recomendado)
+### 🎯 Dashboard Interativo (Recomendado)
+
+Use o dashboard web interativo para extrair e visualizar dados:
+
+```bash
+# Iniciar o dashboard
+streamlit run streamlit_dashboard.py
+
+# Ou use os scripts de inicialização
+./start_dashboard.sh      # Linux/macOS
+start_dashboard.bat       # Windows
+```
+
+**Acesse:** http://localhost:8501
+
+### Script de Linha de Comando
 
 Use o script unificado `gitlab_extractor_unified.py` que combina todas as funcionalidades:
 
@@ -135,6 +150,35 @@ python gitlab_extractor_unified.py \
   --exclude-labels "wontfix"
 ```
 
+## 🎨 Dashboard Interativo
+
+O projeto inclui um dashboard web completo construído com Streamlit que oferece:
+
+### ✨ Funcionalidades do Dashboard:
+
+- **🔍 Interface intuitiva** para configurar extrações
+- **📊 Visualizações interativas** com gráficos dinâmicos
+- **📈 Análises em tempo real** dos dados extraídos
+- **🎯 Filtros avançados** por estado, autor, data e labels
+- **📱 Design responsivo** que funciona em qualquer dispositivo
+- **📥 Download de dados** filtrados em CSV
+
+### 📊 Abas Disponíveis:
+
+1. **Análises**: Gráficos e métricas principais
+2. **Dados Brutos**: Tabela filtrada com todos os dados
+3. **Autores**: Estatísticas e atividade por autor
+4. **Labels**: Análise de tags e categorização
+5. **Temporal**: Padrões de tempo e atividade
+
+### 🎯 Como Usar o Dashboard:
+
+1. Execute `streamlit run streamlit_dashboard.py`
+2. Configure uma nova extração no painel lateral
+3. Explore os dados nas diferentes abas
+4. Use filtros para análises específicas
+5. Baixe dados filtrados quando necessário
+
 ## 📂 Organização Automática de Arquivos
 
 O script organiza automaticamente os relatórios em uma estrutura de diretórios clara:
@@ -226,6 +270,73 @@ pip install requests>=2.31.0 beautifulsoup4>=4.12.0 lxml>=4.9.0
 ```bash
 pip install -r requirements-dev.txt
 ```
+
+## 🎯 Dashboard Interativo
+
+O projeto inclui um dashboard web interativo construído com Streamlit para visualização e análise dos dados extraídos.
+
+### 🚀 Iniciar o Dashboard
+
+**Método mais fácil:**
+
+```bash
+# Linux/macOS
+./run_dashboard.sh
+
+# Windows
+run_dashboard.bat
+```
+
+**Método manual:**
+
+```bash
+streamlit run dashboard.py
+```
+
+### 📊 Funcionalidades do Dashboard
+
+#### 🎛️ **Barra Lateral - Configurações**
+- **Filtros Básicos**: Projeto, estado das issues, número de páginas
+- **Filtros por Labels**: Incluir/excluir labels específicas
+- **Configurações de Saída**: Formato e nome personalizado dos arquivos
+- **Extração Integrada**: Botão para executar extração diretamente do dashboard
+
+#### 📈 **Aba Dashboard**
+- **Métricas Principais**: Total de issues, abertas, média de comentários, etc.
+- **Gráfico de Pizza**: Distribuição por estado (abertas/fechadas)
+- **Timeline**: Issues criadas nos últimos 30 dias
+- **Top Autores**: 10 principais criadores de issues
+- **Distribuição Horária**: Padrão de criação por hora do dia
+- **Labels Mais Comuns**: Top 15 labels mais utilizadas
+
+#### 📋 **Aba Dados Detalhados**
+- **Filtros Avançados**: Por estado, autor e busca textual
+- **Tabela Interativa**: Visualização completa dos dados
+- **Download**: Exportar dados filtrados em CSV ou JSON
+- **Estatísticas**: Contadores dinâmicos dos filtros aplicados
+
+#### 📊 **Aba Análises**
+- **Análise Temporal**: Distribuição por dia da semana
+- **Análise de Comentários**: Categorização por quantidade
+- **Matriz de Correlação**: Relação entre variáveis numéricas
+- **Top Issues**: Por comentários e votos
+
+#### 📁 **Aba Arquivos**
+- **Gerenciamento**: Listar todos os arquivos gerados
+- **Download Individual**: Baixar qualquer arquivo específico
+- **Informações**: Tamanho e data de cada arquivo
+
+### 🌐 **Acesso ao Dashboard**
+
+Após iniciar, acesse: **http://localhost:8501**
+
+### 💡 **Fluxo de Uso Recomendado**
+
+1. **Configure** os parâmetros na barra lateral
+2. **Execute** a extração clicando em "🚀 Extrair Issues"
+3. **Explore** os dados nas diferentes abas
+4. **Analise** os gráficos e métricas
+5. **Exporte** os dados filtrados conforme necessário
 
 ## ⚙️ Configuração
 
