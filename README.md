@@ -229,11 +229,11 @@ Os arquivos CSV gerados podem ser importados em:
 
 ## 🤝 Contribuições
 
-Para melhorar o script:
-1. Adicione tratamento de erros mais robusto
-2. Implemente autenticação via token
-3. Adicione mais formatos de exportação
-4. Melhore a documentação
+Caso deseje contribuir para melhorar o script, estes são pontos que precisamos cobrir:
+1. Adicionar tratamento de erros mais robusto
+2. Implementar autenticação via token
+3. Adicionar mais formatos de exportação
+4. Melhorar a documentação
 
 ---
 
