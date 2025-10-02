@@ -47,7 +47,8 @@ python extract_gitlab_issues.py --help
 
 **Formatos de Saída:**
 - `--output`, `-o`: Formatos de saída (`json`, `csv`, `markdown`, `summary`, `all`)
-- `--filename`, `-f`: Nome base dos arquivos de saída
+- `--filename`, `-f`: Nome personalizado para os arquivos (opcional)
+- `--output-dir`: Diretório base para organizar os relatórios (default: `reports`)
 
 **Controles:**
 - `--include-comments`: Incluir comentários das issues
@@ -63,27 +64,46 @@ python gitlab_extractor_unified.py --output json,summary
 # Extrair apenas issues com labels específicas em CSV
 python gitlab_extractor_unified.py --include-labels "Bug,Enhancement" --output csv
 
-# Filtrar issues excluindo certas labels
-python gitlab_extractor_unified.py --exclude-labels "wontfix,duplicate" --output all
+# Filtrar issues excluindo certas labels com nome personalizado
+python gitlab_extractor_unified.py --exclude-labels "wontfix,duplicate" --output all --filename "issues-filtradas"
 
-# Extração completa com todos os formatos
-python gitlab_extractor_unified.py --state all --pages 10 --output all --include-comments
+# Extração completa com todos os formatos em diretório personalizado
+python gitlab_extractor_unified.py --state all --pages 10 --output all --include-comments --output-dir "exports"
 
 # Extração rápida focada apenas em bugs
-python gitlab_extractor_unified.py --include-labels "Bug" --no-comments --output summary
+python gitlab_extractor_unified.py --include-labels "Bug" --no-comments --output summary --filename "apenas-bugs"
 
-# Usar filtro da API + filtro local
-python gitlab_extractor_unified.py --labels "Bug,Enhancement" --exclude-labels "wontfix"
+# Usar filtro da API + filtro local com diretório específico
+python gitlab_extractor_unified.py --labels "Bug,Enhancement" --exclude-labels "wontfix" --output-dir "bug-reports"
 ```
 
-## 📁 Arquivos gerados
+## 📁 Organização dos Arquivos
 
-O script gera os seguintes arquivos:
+O script organiza automaticamente os arquivos em diretórios separados:
 
-1. **JSON completo** (`*.json`): Dados estruturados completos
-2. **Markdown detalhado** (`*.md`): Relatório formatado com todas as informações
-3. **Resumo** (`*_summary.md`): Relatório resumido com estatísticas
-4. **CSV** (`*.csv`): Dados tabulares para análise em planilhas
+```
+reports/ (ou diretório personalizado)
+├── json/
+│   └── gitlab-issues-2025-10-02.json
+├── csv/
+│   └── gitlab-issues-2025-10-02.csv
+├── markdown/
+│   └── gitlab-issues-2025-10-02.md
+└── summary/
+    └── gitlab-issues-2025-10-02.md
+```
+
+### Formatos de arquivo:
+
+1. **JSON completo** (`json/`): Dados estruturados completos
+2. **CSV** (`csv/`): Dados tabulares para análise em planilhas  
+3. **Markdown detalhado** (`markdown/`): Relatório formatado com todas as informações
+4. **Resumo** (`summary/`): Relatório resumido com estatísticas
+
+### Nomenclatura padronizada:
+
+- **Padrão**: `gitlab-issues-YYYY-MM-DD.extensão`
+- **Personalizado**: `nome-personalizado-YYYY-MM-DD.extensão`
 
 ## 🏷️ Filtros por Labels
 
@@ -113,6 +133,37 @@ python gitlab_extractor_unified.py \
   --labels "Bug" \
   --include-labels "Critical,High" \
   --exclude-labels "wontfix"
+```
+
+## 📂 Organização Automática de Arquivos
+
+O script organiza automaticamente os relatórios em uma estrutura de diretórios clara:
+
+### Estrutura Padrão:
+```
+reports/
+├── json/        # Dados JSON estruturados
+├── csv/         # Planilhas CSV
+├── markdown/    # Relatórios detalhados
+└── summary/     # Resumos executivos
+```
+
+### Vantagens da Organização:
+- ✅ **Separação por tipo**: Cada formato em seu diretório
+- ✅ **Nomenclatura consistente**: Padrão `gitlab-issues-YYYY-MM-DD`
+- ✅ **Fácil localização**: Arquivos organizados por data
+- ✅ **Personalização**: Nomes e diretórios customizáveis
+
+### Exemplos de Organização:
+```bash
+# Diretório padrão "reports"
+python gitlab_extractor_unified.py --output all
+
+# Diretório personalizado
+python gitlab_extractor_unified.py --output all --output-dir "exports"
+
+# Nome personalizado + diretório específico
+python gitlab_extractor_unified.py --output all --filename "bugs-criticos" --output-dir "bug-reports"
 ```
 
 ## 📊 Informações extraídas
@@ -189,27 +240,30 @@ Script original (mantido para compatibilidade).
 ## 🔍 Exemplo de uso completo
 
 ```bash
-# 1. Extrair issues com filtros específicos e múltiplos formatos
+# 1. Extrair issues com filtros específicos organizados
 python gitlab_extractor_unified.py \
   --include-labels "Bug,Enhancement" \
   --exclude-labels "wontfix" \
   --output all \
   --verbose \
-  --filename "issues_filtradas"
+  --filename "issues-filtradas" \
+  --output-dir "relatorios"
 
-# 2. Extração focada apenas em bugs críticos
+# 2. Extração focada apenas em bugs críticos com data no nome
 python gitlab_extractor_unified.py \
   --include-labels "Bug" \
   --labels "Critical,High" \
   --output csv,summary \
-  --no-comments
+  --no-comments \
+  --filename "bugs-criticos"
 
-# 3. Relatório completo com comentários
+# 3. Relatório completo com comentários em diretório específico
 python gitlab_extractor_unified.py \
   --state all \
   --include-comments \
   --output all \
-  --pages 10
+  --pages 10 \
+  --output-dir "exports/completo"
 ```
 
 ## 🚨 Notas importantes

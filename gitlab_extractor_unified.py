@@ -10,17 +10,31 @@ import time
 import argparse
 import csv
 import re
+import os
 from datetime import datetime
 from urllib.parse import quote, urljoin
+from pathlib import Path
 
 class GitLabIssuesExtractor:
-    def __init__(self, base_url="https://gitlab.com"):
+    def __init__(self, base_url="https://gitlab.com", output_base_dir="reports"):
         self.base_url = base_url
         self.api_url = f"{base_url}/api/v4"
+        self.output_base_dir = output_base_dir
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
         })
+        
+        # Criar diretórios de saída se não existirem
+        self.directories = {
+            'json': Path(self.output_base_dir) / 'json',
+            'csv': Path(self.output_base_dir) / 'csv', 
+            'markdown': Path(self.output_base_dir) / 'markdown',
+            'summary': Path(self.output_base_dir) / 'summary'
+        }
+        
+        for directory in self.directories.values():
+            directory.mkdir(parents=True, exist_ok=True)
 
     def get_project_issues(self, project_path, state='opened', per_page=50, page=1, labels=None):
         """Busca issues de um projeto usando a API pública do GitLab"""
@@ -202,19 +216,44 @@ class GitLabIssuesExtractor:
         
         return all_issues
 
-    def save_to_json(self, issues_data, filename):
+    def get_standardized_filename(self, format_type, custom_name=None):
+        """Gera nome padronizado do arquivo baseado na data atual"""
+        current_date = datetime.now().strftime("%Y-%m-%d")
+        
+        if custom_name:
+            base_name = f"{custom_name}-{current_date}"
+        else:
+            base_name = f"gitlab-issues-{current_date}"
+        
+        extensions = {
+            'json': '.json',
+            'csv': '.csv', 
+            'markdown': '.md',
+            'summary': '.md'
+        }
+        
+        filename = base_name + extensions[format_type]
+        filepath = self.directories[format_type] / filename
+        
+        return filepath
+
+    def save_to_json(self, issues_data, custom_name=None):
         """Salva os dados das issues em um arquivo JSON"""
         try:
-            with open(filename, 'w', encoding='utf-8') as f:
+            filepath = self.get_standardized_filename('json', custom_name)
+            with open(filepath, 'w', encoding='utf-8') as f:
                 json.dump(issues_data, f, indent=2, ensure_ascii=False)
-            print(f"✅ Dados JSON salvos em: {filename}")
+            print(f"✅ Dados JSON salvos em: {filepath}")
+            return str(filepath)
         except Exception as e:
             print(f"❌ Erro ao salvar arquivo JSON: {e}")
+            return None
 
-    def save_to_csv(self, issues_data, filename):
+    def save_to_csv(self, issues_data, custom_name=None):
         """Salva os dados das issues em formato CSV"""
         try:
-            with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
+            filepath = self.get_standardized_filename('csv', custom_name)
+            with open(filepath, 'w', newline='', encoding='utf-8') as csvfile:
                 fieldnames = [
                     'id', 'iid', 'title', 'author', 'author_username', 'state',
                     'created_at', 'updated_at', 'closed_at', 'labels', 'assignees', 
@@ -252,14 +291,17 @@ class GitLabIssuesExtractor:
                     }
                     writer.writerow(row)
             
-            print(f"✅ Dados CSV salvos em: {filename}")
+            print(f"✅ Dados CSV salvos em: {filepath}")
+            return str(filepath)
         except Exception as e:
             print(f"❌ Erro ao salvar arquivo CSV: {e}")
+            return None
 
-    def save_to_markdown(self, issues_data, filename):
+    def save_to_markdown(self, issues_data, custom_name=None):
         """Salva os dados das issues em formato Markdown detalhado"""
         try:
-            with open(filename, 'w', encoding='utf-8') as f:
+            filepath = self.get_standardized_filename('markdown', custom_name)
+            with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(f"# Issues do GitLab - Relatório Detalhado\n\n")
                 f.write(f"**Data da extração:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"**Total de issues:** {len(issues_data)}\n\n")
@@ -293,14 +335,17 @@ class GitLabIssuesExtractor:
                     
                     f.write("---\n\n")
             
-            print(f"✅ Relatório Markdown salvo em: {filename}")
+            print(f"✅ Relatório Markdown salvo em: {filepath}")
+            return str(filepath)
         except Exception as e:
             print(f"❌ Erro ao salvar arquivo Markdown: {e}")
+            return None
 
-    def save_summary_report(self, issues_data, filename):
+    def save_summary_report(self, issues_data, custom_name=None):
         """Cria um relatório resumido das issues extraídas"""
         try:
-            with open(filename, 'w', encoding='utf-8') as f:
+            filepath = self.get_standardized_filename('summary', custom_name)
+            with open(filepath, 'w', encoding='utf-8') as f:
                 f.write("# Relatório Resumido - Issues do GitLab\n\n")
                 f.write(f"**Data da extração:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
                 f.write(f"**Total de issues:** {len(issues_data)}\n\n")
@@ -369,9 +414,11 @@ class GitLabIssuesExtractor:
                     
                     f.write("\n---\n\n")
             
-            print(f"✅ Relatório resumido salvo em: {filename}")
+            print(f"✅ Relatório resumido salvo em: {filepath}")
+            return str(filepath)
         except Exception as e:
             print(f"❌ Erro ao salvar relatório resumido: {e}")
+            return None
 
     def print_summary(self, issues_data):
         """Imprime um resumo das issues extraídas"""
@@ -465,7 +512,11 @@ Exemplos de uso:
                        help='Formatos de saída: json, csv, markdown, summary, all (separados por vírgula)')
     
     parser.add_argument('--filename', '-f',
-                       help='Nome base dos arquivos de saída (default: gitlab_issues_TIMESTAMP)')
+                       help='Nome personalizado para os arquivos (será adicionado antes da data)')
+    
+    parser.add_argument('--output-dir',
+                       default='reports',
+                       help='Diretório base para salvar os relatórios (default: reports)')
     
     # Argumentos de comportamento
     parser.add_argument('--include-comments', 
@@ -495,12 +546,8 @@ Exemplos de uso:
     if 'all' in output_formats:
         output_formats = ['json', 'csv', 'markdown', 'summary']
     
-    # Definir nome base dos arquivos
-    if args.filename:
-        filename_base = args.filename
-    else:
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename_base = f"gitlab_issues_{timestamp}"
+    # Definir nome personalizado (se fornecido)
+    custom_name = args.filename if args.filename else None
     
     # Mostrar configurações se verboso
     if args.verbose:
@@ -513,7 +560,9 @@ Exemplos de uso:
         print(f"Delay: {args.delay}s")
         print(f"Incluir comentários: {include_comments}")
         print(f"Formatos de saída: {', '.join(output_formats)}")
-        print(f"Nome base: {filename_base}")
+        print(f"Diretório de saída: {args.output_dir}")
+        if custom_name:
+            print(f"Nome personalizado: {custom_name}")
         if labels:
             print(f"Filtro API por labels: {labels}")
         if include_labels:
@@ -522,8 +571,8 @@ Exemplos de uso:
             print(f"Excluir labels: {exclude_labels}")
         print("=" * 60)
     
-    # Criar extrator
-    extractor = GitLabIssuesExtractor()
+    # Criar extrator com diretório de saída personalizado
+    extractor = GitLabIssuesExtractor(output_base_dir=args.output_dir)
     
     print("🚀 Iniciando extração de issues do GitLab...")
     
@@ -552,24 +601,24 @@ Exemplos de uso:
     generated_files = []
     
     if 'json' in output_formats:
-        json_filename = f"{filename_base}.json"
-        extractor.save_to_json(issues, json_filename)
-        generated_files.append(json_filename)
+        json_file = extractor.save_to_json(issues, custom_name)
+        if json_file:
+            generated_files.append(json_file)
     
     if 'csv' in output_formats:
-        csv_filename = f"{filename_base}.csv"
-        extractor.save_to_csv(issues, csv_filename)
-        generated_files.append(csv_filename)
+        csv_file = extractor.save_to_csv(issues, custom_name)
+        if csv_file:
+            generated_files.append(csv_file)
     
     if 'markdown' in output_formats:
-        md_filename = f"{filename_base}.md"
-        extractor.save_to_markdown(issues, md_filename)
-        generated_files.append(md_filename)
+        md_file = extractor.save_to_markdown(issues, custom_name)
+        if md_file:
+            generated_files.append(md_file)
     
     if 'summary' in output_formats:
-        summary_filename = f"{filename_base}_summary.md"
-        extractor.save_summary_report(issues, summary_filename)
-        generated_files.append(summary_filename)
+        summary_file = extractor.save_summary_report(issues, custom_name)
+        if summary_file:
+            generated_files.append(summary_file)
     
     # Relatório final
     print(f"\n✅ EXTRAÇÃO CONCLUÍDA COM SUCESSO!")
